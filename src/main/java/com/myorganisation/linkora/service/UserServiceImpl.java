@@ -8,6 +8,7 @@ import com.myorganisation.linkora.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,16 +28,69 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto registerUser(UserRequestDto userRequestDto) {
-        User user = new User();
+        User user = mapUserRequestDtoToUser(userRequestDto, new User());
+        userRepository.save(user);
+        return mapUserToUserResponseDto(user);
+    }
 
-        user.setFirstName(userRequestDto.getFirstName());
-        user.setLastName(userRequestDto.getLastName());
-        user.setGender(userRequestDto.getGender());
-        user.setEmail(userRequestDto.getEmail());
-        user.setPassword(userRequestDto.getPassword());
+    @Override
+    public UserResponseDto getUser(Long id) {
+//        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User doesn't exist"));
+
+        User user = userRepository.findById(id).orElse(null);
+
+        return (user != null) ? mapUserToUserResponseDto(user) : null;
+    }
+
+    @Override
+    public List<UserResponseDto> getAllUsers() {
+        List<User> userList = userRepository.findAll();
+        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+
+        for(User user : userList) {
+            userResponseDtoList.add(mapUserToUserResponseDto(user));
+        }
+
+        return userResponseDtoList;
+    }
+
+    @Override
+    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
+        User user = userRepository.findById(id).orElse(null);
+
+        if(user == null) {
+            return null;
+        }
+
+        user = mapUserRequestDtoToUser(userRequestDto, user);
 
         userRepository.save(user);
 
+        return mapUserToUserResponseDto(user);
+    }
+
+    @Override
+    public GenericResponseDto removeUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+        GenericResponseDto genericResponseDto = new GenericResponseDto();
+
+        if(user == null) {
+            // User doesn't exist in DB
+            genericResponseDto.setSuccess(false);
+            genericResponseDto.setMessage("User not found");
+        } else {
+            userRepository.deleteById(id);
+            genericResponseDto.setSuccess(true);
+            genericResponseDto.setMessage("User name: " + user.getFirstName() + " " + user.getLastName() + " has been removed");
+        }
+
+        return genericResponseDto;
+    }
+
+    // helper methods
+
+    // map User to UserResponseDto
+    private UserResponseDto mapUserToUserResponseDto(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
 
         userResponseDto.setId(user.getId());
@@ -48,23 +102,14 @@ public class UserServiceImpl implements UserService {
         return userResponseDto;
     }
 
-    @Override
-    public UserResponseDto getUser(Long id) {
-        return null;
-    }
+    // map UserRequestDto to User
+    private User mapUserRequestDtoToUser(UserRequestDto userRequestDto, User user) {
+        user.setFirstName(userRequestDto.getFirstName());
+        user.setLastName(userRequestDto.getLastName());
+        user.setGender(userRequestDto.getGender());
+        user.setEmail(userRequestDto.getEmail());
+        user.setPassword(userRequestDto.getPassword());
 
-    @Override
-    public List<UserResponseDto> getAllUsers() {
-        return List.of();
-    }
-
-    @Override
-    public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
-        return null;
-    }
-
-    @Override
-    public GenericResponseDto removeUser(Long id) {
-        return null;
+        return user;
     }
 }
