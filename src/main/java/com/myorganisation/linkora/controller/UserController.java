@@ -3,7 +3,9 @@ package com.myorganisation.linkora.controller;
 import com.myorganisation.linkora.dto.request.UserRequestDto;
 import com.myorganisation.linkora.dto.response.GenericResponseDto;
 import com.myorganisation.linkora.dto.response.UserResponseDto;
+import com.myorganisation.linkora.enums.Gender;
 import com.myorganisation.linkora.service.UserService;
+import com.myorganisation.linkora.service.UserServiceImpl;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +45,23 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<GenericResponseDto> removeUser(@RequestParam Long id) {
         return new ResponseEntity<>(userService.removeUser(id), HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/search/email/{email}")
+    public ResponseEntity<UserResponseDto> searchUserByEmail(@PathVariable String email) {
+        return new ResponseEntity<>(userService.searchUserByEmail(email), HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/search/firstName/{firstName}")
+    public ResponseEntity<List<UserResponseDto>> searchUsersByFirstName(@PathVariable String firstName) {
+        return new ResponseEntity<>(userService.searchUsersByFirstName(firstName),  HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/search/filter")
+    public ResponseEntity<List<UserResponseDto>> searchUsersWithFilter(
+            @RequestParam String name,
+            @RequestParam Gender gender
+    ) {
+        return new ResponseEntity<>(userService.searchUsersWithFilter(name, gender), HttpStatusCode.valueOf(200));
     }
 }

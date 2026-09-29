@@ -4,6 +4,7 @@ import com.myorganisation.linkora.dto.request.UserRequestDto;
 import com.myorganisation.linkora.dto.response.GenericResponseDto;
 import com.myorganisation.linkora.dto.response.UserResponseDto;
 import com.myorganisation.linkora.entity.User;
+import com.myorganisation.linkora.enums.Gender;
 import com.myorganisation.linkora.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,36 @@ public class UserServiceImpl implements UserService {
         }
 
         return genericResponseDto;
+    }
+
+    @Override
+    public UserResponseDto searchUserByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        return (user != null) ? mapUserToUserResponseDto(user) : null;
+    }
+
+    @Override
+    public List<UserResponseDto> searchUsersByFirstName(String firstName) {
+        List<User> userList = userRepository.findByFirstName(firstName);
+        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+
+        for(User user : userList) {
+            userResponseDtoList.add(mapUserToUserResponseDto(user));
+        }
+
+        return userResponseDtoList;
+    }
+
+    @Override
+    public List<UserResponseDto> searchUsersWithFilter(String name, Gender gender) {
+        List<User> userList = userRepository.findByGenderAndFirstNameContainingOrLastNameContaining(gender, name, name);
+        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+
+        for(User user : userList) {
+            userResponseDtoList.add(mapUserToUserResponseDto(user));
+        }
+
+        return userResponseDtoList;
     }
 
     // helper methods
