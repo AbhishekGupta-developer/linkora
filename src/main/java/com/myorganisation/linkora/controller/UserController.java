@@ -5,7 +5,6 @@ import com.myorganisation.linkora.dto.response.GenericResponseDto;
 import com.myorganisation.linkora.dto.response.UserResponseDto;
 import com.myorganisation.linkora.enums.Gender;
 import com.myorganisation.linkora.service.UserService;
-import com.myorganisation.linkora.service.UserServiceImpl;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

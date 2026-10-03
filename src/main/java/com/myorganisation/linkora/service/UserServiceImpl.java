@@ -6,7 +6,6 @@ import com.myorganisation.linkora.dto.response.UserResponseDto;
 import com.myorganisation.linkora.entity.User;
 import com.myorganisation.linkora.enums.Gender;
 import com.myorganisation.linkora.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
