@@ -45,6 +45,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDto> getAllUsers() {
         List<User> userList = userRepository.findAll();
+
+        // Native Query
+//        List<User> userList = userRepository.getAllUsers();
         List<UserResponseDto> userResponseDtoList = new ArrayList<>();
 
         for(User user : userList) {
@@ -90,6 +93,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto searchUserByEmail(String email) {
         User user = userRepository.findByEmail(email).orElse(null);
+
+        // JPQL
+        // User user = userRepository.searchByEmail(email).orElse(null);
         return (user != null) ? mapUserToUserResponseDto(user) : null;
     }
 
@@ -107,7 +113,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponseDto> searchUsersWithFilter(String name, Gender gender) {
-        List<User> userList = userRepository.findByGenderAndFirstNameContainingOrLastNameContaining(gender, name, name);
+//        List<User> userList = userRepository.findByGenderAndFirstNameContainingOrLastNameContaining(gender, name, name);
+
+        List<User> userList = userRepository.searchByFirstNameAndLastNameWithGender(name, name, gender);
         List<UserResponseDto> userResponseDtoList = new ArrayList<>();
 
         for(User user : userList) {
