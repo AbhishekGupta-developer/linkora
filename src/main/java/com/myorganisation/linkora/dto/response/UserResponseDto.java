@@ -1,5 +1,6 @@
 package com.myorganisation.linkora.dto.response;
 
+import com.myorganisation.linkora.entity.Account;
 import com.myorganisation.linkora.enums.Gender;
 import lombok.Data;
 
@@ -10,4 +11,5 @@ public class UserResponseDto {
     private String lastName;
     private Gender gender;
     private String email;
+    private Account account;
 }

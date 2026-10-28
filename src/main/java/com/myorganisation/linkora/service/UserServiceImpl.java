@@ -3,8 +3,10 @@ package com.myorganisation.linkora.service;
 import com.myorganisation.linkora.dto.request.UserRequestDto;
 import com.myorganisation.linkora.dto.response.GenericResponseDto;
 import com.myorganisation.linkora.dto.response.UserResponseDto;
+import com.myorganisation.linkora.entity.Account;
 import com.myorganisation.linkora.entity.User;
 import com.myorganisation.linkora.enums.Gender;
+import com.myorganisation.linkora.repository.AccountRepository;
 import com.myorganisation.linkora.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +23,25 @@ public class UserServiceImpl implements UserService {
 
     // DEPENDENCY INJECTION USING CONSTRUCTOR (PARAMETERISED) INJECTION => RECOMMENDED
     private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, AccountRepository accountRepository) {
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
 
     @Override
     public UserResponseDto registerUser(UserRequestDto userRequestDto) {
         User user = mapUserRequestDtoToUser(userRequestDto, new User());
+
+        Account account = new Account();
+        account.setBalance(0D);
+        account.setUser(user);
+
+        user.setAccount(account);
+
         userRepository.save(user);
+
         return mapUserToUserResponseDto(user);
     }
 
@@ -136,6 +148,7 @@ public class UserServiceImpl implements UserService {
         userResponseDto.setLastName(user.getLastName());
         userResponseDto.setGender(user.getGender());
         userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setAccount(user.getAccount());
 
         return userResponseDto;
     }
