@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
         User user = mapUserRequestDtoToUser(userRequestDto, new User());
 
         Account account = new Account();
-        account.setBalance(0D);
         account.setUser(user);
 
         user.setAccount(account);
