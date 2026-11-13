@@ -48,14 +48,14 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserPage(pageIndex, pageSize, sortBy, sortOrder), HttpStatusCode.valueOf(200));
     }
 
-    @GetMapping("/page/user-response-dto")
-    public ResponseEntity<Page<UserResponseDto>> getUserResponseDtoPage(
+    @GetMapping("/page/user-response")
+    public ResponseEntity<Page<UserResponseDto>> getUserResponsePage(
             @RequestParam(defaultValue = "0") int pageIndex,
             @RequestParam(defaultValue = "10") int pageSize,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "ASC") String sortOrder
     ) {
-        return null;
+        return new ResponseEntity<>(userService.getUserResponsePage(pageIndex, pageSize, sortBy, sortOrder), HttpStatusCode.valueOf(200));
     }
 
 

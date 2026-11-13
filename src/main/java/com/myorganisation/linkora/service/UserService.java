@@ -21,4 +21,5 @@ public interface UserService {
     List<UserResponseDto> searchUsersWithFilter(String name, Gender gender);
 
     Page<User> getUserPage(int pageIndex, int pageSize, String sortBy, String sortOrder);
+    Page<UserResponseDto> getUserResponsePage(int pageIndex, int pageSize, String sortBy, String sortOrder);
 }

@@ -148,6 +148,14 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll(pageable);
     }
 
+    @Override
+    public Page<UserResponseDto> getUserResponsePage(int pageIndex, int pageSize, String sortBy, String sortOrder) {
+        Sort sort = sortOrder.equalsIgnoreCase("ASC") ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+        return userRepository.findAll(pageable).map(this::mapUserToUserResponseDto);
+    }
+
     // helper methods
 
     // map User to UserResponseDto
