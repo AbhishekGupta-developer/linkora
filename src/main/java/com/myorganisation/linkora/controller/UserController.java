@@ -3,8 +3,10 @@ package com.myorganisation.linkora.controller;
 import com.myorganisation.linkora.dto.request.UserRequestDto;
 import com.myorganisation.linkora.dto.response.GenericResponseDto;
 import com.myorganisation.linkora.dto.response.UserResponseDto;
+import com.myorganisation.linkora.entity.User;
 import com.myorganisation.linkora.enums.Gender;
 import com.myorganisation.linkora.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +37,27 @@ public class UserController {
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatusCode.valueOf(200));
     }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<User>> getUserPage(
+            @RequestParam(defaultValue = "0") int pageIndex,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortOrder
+    ) {
+        return new ResponseEntity<>(userService.getUserPage(pageIndex, pageSize, sortBy, sortOrder), HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/page/user-response-dto")
+    public ResponseEntity<Page<UserResponseDto>> getUserResponseDtoPage(
+            @RequestParam(defaultValue = "0") int pageIndex,
+            @RequestParam(defaultValue = "10") int pageSize,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "ASC") String sortOrder
+    ) {
+        return null;
+    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody UserRequestDto userRequestDto) {

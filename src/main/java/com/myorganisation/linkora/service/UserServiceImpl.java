@@ -8,6 +8,10 @@ import com.myorganisation.linkora.entity.User;
 import com.myorganisation.linkora.enums.Gender;
 import com.myorganisation.linkora.repository.AccountRepository;
 import com.myorganisation.linkora.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -134,6 +138,14 @@ public class UserServiceImpl implements UserService {
         }
 
         return userResponseDtoList;
+    }
+
+    @Override
+    public Page<User> getUserPage(int pageIndex, int pageSize, String sortBy, String sortOrder) {
+        Sort sort = sortOrder.equalsIgnoreCase("ASC") ? Sort.by(Sort.Direction.ASC, sortBy) : Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
+
+        return userRepository.findAll(pageable);
     }
 
     // helper methods
