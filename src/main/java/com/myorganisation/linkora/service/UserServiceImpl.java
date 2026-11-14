@@ -154,6 +154,8 @@ public class UserServiceImpl implements UserService {
         Pageable pageable = PageRequest.of(pageIndex, pageSize, sort);
 
         return userRepository.findAll(pageable).map(this::mapUserToUserResponseDto);
+
+//        return userRepository.findAll(pageable).map(user -> mapUserToUserResponseDto(user));
     }
 
     // helper methods
